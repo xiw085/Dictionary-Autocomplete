@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <string>
+#include <unordered_map>
 
 /**
  *  The class for a dictionary ADT, implemented as a trie
@@ -49,6 +50,25 @@ public:
 
 private:
   // Add your own data members and methods here
+
+  class TrieNode
+  {
+  	public: 
+		bool isWord;
+		std::unordered_map<char,TrieNode*> children;
+		std::string text;
+		unsigned int freq;
+		
+		//constructor
+		TrieNode(bool isWord, std::string text, unsigned int freq);
+		
+		//deconstructor
+		~TrieNode();
+  };
+
+  TrieNode* root;
+
+  void deleteAll(TrieNode* node);
 };
 
 #endif // DICTIONARY_TRIE_HPP

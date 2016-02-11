@@ -7,6 +7,7 @@
 #define DICTIONARY_HASHTABLE_HPP
 
 #include <string>
+#include <unordered_set>
 
 /**
  *  The class for a dictionary ADT, implemented as a Hashtable
@@ -15,6 +16,7 @@
  * a Hashtable, so we strongly suggest you use that to store 
  * the dictionary.
  */
+
 class DictionaryHashtable
 {
 public:
@@ -33,6 +35,7 @@ public:
 
 private:
   // Add your own data members and methods here
+  std::unordered_set<std::string> dictionary;
 };
 
 #endif // DICTIONARY_HASHTABLE_HPP

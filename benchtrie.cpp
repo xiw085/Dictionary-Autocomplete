@@ -4,6 +4,7 @@
 
 #include "util.hpp"
 #include "DictionaryTrie.hpp"
+#include <string>
 #include <fstream>
 #include <sstream>
 
@@ -167,8 +168,28 @@ int main(int argc, char *argv[]) {
         exit(-1);
     }
 
-    testStudent(argv[1]);
+    //testStudent(argv[1]);
 
-    // TODO - Your benchmarking for Part 3.
+    std::ifstream in;
+    in.open(argv[1], std::ios::binary);
 
+	DictionaryTrie* dictionary_trie = new DictionaryTrie();
+	//DictionaryTrie dictionary_trie;
+
+    Utils::load_dict(*dictionary_trie, in);
+
+	in.close();
+	std:: cout << "inserting abcd: " << dictionary_trie->insert("abcd", 10) << std::endl;
+	std:: cout << "inserting abduce: " << dictionary_trie->insert("abduce", 10) << std::endl;
+	std::cout << "inserting batiments: " << dictionary_trie->insert("batiments",10) << std::endl;
+	std::cout << "inserting kleins: " << dictionary_trie->insert("kleins",10) << std::endl;
+
+	std::cout << "finding shrouding: " << dictionary_trie->find("shrouding") << std::endl;	
+	std::cout << "finding shtick: " << dictionary_trie->find("shtick") << std::endl;	
+	std::cout << "finding sdfkjd: " << dictionary_trie->find("sdfkjd") << std::endl;	
+	std::cout << "finding abcd: " << dictionary_trie->find("abcd") << std::endl;	
+
+	delete dictionary_trie;
+
+	return 0;
 }

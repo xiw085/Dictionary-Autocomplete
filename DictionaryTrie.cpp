@@ -2,7 +2,8 @@
 #include "DictionaryTrie.hpp"
 
 /* Create a new Dictionary that uses a Trie back end */
-DictionaryTrie::DictionaryTrie(){}
+DictionaryTrie::DictionaryTrie()
+{root = new TrieNode(false, "", 0);}
 
 /* Insert a word with its frequency into the dictionary.
  * Return true if the word was inserted, and false if it
@@ -10,13 +11,65 @@ DictionaryTrie::DictionaryTrie(){}
  * invalid (empty string) */
 bool DictionaryTrie::insert(std::string word, unsigned int freq)
 {
+  TrieNode* node = root;
+  std::string prevText = "";
+  bool end = false;
+  unsigned int freqs = 0;
+
+  for(unsigned int i = 0 ; i < word.size(); ++i)
+  {
+  	if(i+1 == word.size())
+	{
+	  end = true;
+	  freqs = freq;
+	}
+
+  	std::unordered_map<char, TrieNode*>::const_iterator find =
+	  node->children.find(word[i]);
+	
+	if(find == node->children.end())
+	{
+      prevText = node->text;
+	  prevText += word[i];
+
+	  TrieNode* newNode = new TrieNode(end, prevText, freqs);
+	  node->children.insert({word[i], newNode});
+	  if(end)
+	  {
+	  	return true;
+	  }
+	}
+	if(!end)
+	{
+	  node = node->children[word[i]];
+	}
+	else if(!node->children[word[i]]->isWord)
+	{
+	  node = node->children[word[i]];
+	  node->isWord = true;
+	  node->freq = freqs;
+	  return true;
+	}
+  }
   return false;
 }
 
 /* Return true if word is in the dictionary, and false otherwise */
 bool DictionaryTrie::find(std::string word) const
 {
-  return false;
+	TrieNode* node = root;
+	std::unordered_map<char,TrieNode*>::const_iterator find;
+
+	for(unsigned int i = 0; i < word.size(); ++i)
+	{
+		find = node->children.find(word[i]);
+		if(find == node->children.end())
+		{
+			return false;
+		}
+		node = node->children[word[i]];
+	}
+	return node->isWord;
 }
 
 /* Return up to num_completions of the most frequent completions
@@ -36,4 +89,39 @@ std::vector<std::string> DictionaryTrie::predictCompletions(std::string prefix, 
 }
 
 /* Destructor */
-DictionaryTrie::~DictionaryTrie(){}
+DictionaryTrie::~DictionaryTrie()
+{
+  if(root)
+  {
+  	deleteAll(root);
+    delete root;
+  }
+  root = 0;
+}
+
+void DictionaryTrie::deleteAll(TrieNode* node)
+{
+  std::unordered_map<char,TrieNode*>::iterator find =
+  	node->children.begin();
+
+  while(find != node->children.end())
+  {    
+    deleteAll(find->second);
+	delete find->second;
+	++find;
+  }
+}
+
+DictionaryTrie::TrieNode::TrieNode(bool isWord, std::string text
+								, unsigned int freq)
+{
+  this->children = std::unordered_map<char, TrieNode*>();
+  this->isWord = isWord;
+  this->text = text;
+  this->freq = freq;
+}
+
+DictionaryTrie::TrieNode::~TrieNode()
+{}
+
+
