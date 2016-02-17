@@ -31,6 +31,8 @@ void testStudent(std::string dict_filename){
     // Test 1
     std::cout << "\n\tTest 1: prefix= \"*iterating through alphabet*\", num_completions= 10" << std::endl;
     T.begin_timer();
+	
+
     int count = 0;
     results = dictionary_trie->predictCompletions("a",10);
     count += results.size();
@@ -168,21 +170,21 @@ int main(int argc, char *argv[]) {
         exit(-1);
     }
 
-    //testStudent(argv[1]);
-
+    testStudent(argv[1]);
+/*
     std::ifstream in;
     in.open(argv[1], std::ios::binary);
 
 	DictionaryTrie* dictionary_trie = new DictionaryTrie();
-	//DictionaryTrie dictionary_trie;
-
+	
     Utils::load_dict(*dictionary_trie, in);
 
-	in.close();
-	std:: cout << "inserting abcd: " << dictionary_trie->insert("abcd", 10) << std::endl;
-	std:: cout << "inserting abduce: " << dictionary_trie->insert("abduce", 10) << std::endl;
-	std::cout << "inserting batiments: " << dictionary_trie->insert("batiments",10) << std::endl;
-	std::cout << "inserting kleins: " << dictionary_trie->insert("kleins",10) << std::endl;
+	in.close();*/
+	/*
+	std:: cout << "inserting abcd: " << dictionary_trie->insert("abcd", 2) << std::endl;
+	std:: cout << "inserting a: " << dictionary_trie->insert("a", 100) << std::endl;
+	std::cout << "inserting ab: " << dictionary_trie->insert("ab",101) << std::endl;
+	std::cout << "inserting abc: " << dictionary_trie->insert("abc",100) << std::endl;
 
 	std::cout << "finding shrouding: " << dictionary_trie->find("shrouding") << std::endl;	
 	std::cout << "finding shtick: " << dictionary_trie->find("shtick") << std::endl;	
@@ -190,6 +192,6 @@ int main(int argc, char *argv[]) {
 	std::cout << "finding abcd: " << dictionary_trie->find("abcd") << std::endl;	
 
 	delete dictionary_trie;
-
+*/
 	return 0;
 }

@@ -9,6 +9,8 @@
 #include <vector>
 #include <string>
 #include <unordered_map>
+#include <queue>
+#include <stack>
 
 /**
  *  The class for a dictionary ADT, implemented as a trie
@@ -58,15 +60,39 @@ private:
 		std::unordered_map<char,TrieNode*> children;
 		std::string text;
 		unsigned int freq;
+		unsigned int maxFreq;
+		unsigned int minFreq;
 		
 		//constructor
 		TrieNode(bool isWord, std::string text, unsigned int freq);
 		
 		//deconstructor
 		~TrieNode();
+		
+		bool maxLess(const TrieNode& other);
+
+		bool freqLess(const TrieNode& other);
   };
 
+  class TrieTreeComp {
+  	public:
+		bool operator()(TrieNode*& lhs, TrieNode*& rhs) const 
+		{
+		  return (*lhs).maxLess(*rhs);
+		}
+  };
+
+  class TrieNodeComp {
+  	public:
+		bool operator()(TrieNode*& lhs, TrieNode*& rhs) const
+		{
+		  return (*lhs).freqLess(*rhs); 
+		}
+  };
+  
   TrieNode* root;
+  
+  void changeTreeFreq(std::string word, unsigned int freq);
 
   void deleteAll(TrieNode* node);
 };

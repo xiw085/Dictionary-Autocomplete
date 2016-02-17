@@ -36,6 +36,7 @@ bool DictionaryTrie::insert(std::string word, unsigned int freq)
 	  node->children.insert({word[i], newNode});
 	  if(end)
 	  {
+	  	changeTreeFreq(word, freqs);
 	  	return true;
 	  }
 	}
@@ -48,10 +49,28 @@ bool DictionaryTrie::insert(std::string word, unsigned int freq)
 	  node = node->children[word[i]];
 	  node->isWord = true;
 	  node->freq = freqs;
+	  changeTreeFreq(word, freqs);
 	  return true;
 	}
   }
   return false;
+}
+
+void DictionaryTrie::changeTreeFreq(std::string word, unsigned int freq)
+{
+  TrieNode* node = root;
+  for(unsigned int i = 0; i < word.size(); ++i)
+  {
+  	if(freq > node->maxFreq)
+	{
+  	  node->maxFreq = freq;
+	}
+	if(freq < node->minFreq)
+	{
+	  node->minFreq = freq;
+	}
+	node = node->children[word[i]];
+  }
 }
 
 /* Return true if word is in the dictionary, and false otherwise */
@@ -84,10 +103,67 @@ bool DictionaryTrie::find(std::string word) const
  */
 std::vector<std::string> DictionaryTrie::predictCompletions(std::string prefix, unsigned int num_completions)
 {
-  std::vector<std::string> words;
+  std::vector<std::string> words(num_completions);
+
+  TrieNode* node = root;
+  std::unordered_map<char,TrieNode*>::const_iterator find;
+  std::priority_queue<TrieNode*, std::vector<TrieNode*>, 
+  					 TrieTreeComp> treePq;
+  std::priority_queue<TrieNode*, std::vector<TrieNode*>,
+  					 TrieNodeComp> nodePq;
+
+  for(unsigned int i = 0; i < prefix.size(); ++i)
+  {
+  	find = node->children.find(prefix[i]);
+	if(find == node->children.end())
+	{
+	  words = std::vector<std::string>(0);
+	  return words;
+	}
+	node = node->children[prefix[i]];
+  }
+  
+  treePq.push(node);
+  
+  while(!treePq.empty())
+  {
+  	node = treePq.top();
+	treePq.pop();
+	if(node->isWord)
+	{
+	  nodePq.push(node);
+	}
+	
+	find = node->children.begin();
+	while(find != node->children.end())
+	{
+      treePq.push(find->second);
+	  ++find;
+	}
+  }
+	
+  if(nodePq.size() < num_completions)
+  {
+  	words = std::vector<std::string>(nodePq.size());
+  }
+
+  for(unsigned int i = 0; i < num_completions && !nodePq.empty(); ++i)
+  {
+  	words[i] = nodePq.top()->text;
+	nodePq.pop();
+  }
+
   return words;
 }
-
+/*
+void recursiveFind(auto nodePq, TrieNode* node)
+{
+  while(node->maxFreq != node->freq)
+  {
+  	nodePq.push( 
+  }
+}
+*/
 /* Destructor */
 DictionaryTrie::~DictionaryTrie()
 {
@@ -119,9 +195,20 @@ DictionaryTrie::TrieNode::TrieNode(bool isWord, std::string text
   this->isWord = isWord;
   this->text = text;
   this->freq = freq;
+  this->maxFreq = 0;
+  this->minFreq = 0;
 }
 
 DictionaryTrie::TrieNode::~TrieNode()
 {}
 
+bool DictionaryTrie::TrieNode::maxLess(const TrieNode& other)
+{
+  return maxFreq < other.maxFreq;
+}
+
+bool DictionaryTrie::TrieNode::freqLess(const TrieNode& other)
+{
+  return freq < other.freq;
+}
 
