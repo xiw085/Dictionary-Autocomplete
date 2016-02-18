@@ -61,7 +61,6 @@ private:
 		std::string text;
 		unsigned int freq;
 		unsigned int maxFreq;
-		unsigned int minFreq;
 		
 		//constructor
 		TrieNode(bool isWord, std::string text, unsigned int freq);
@@ -72,6 +71,8 @@ private:
 		bool maxLess(const TrieNode& other);
 
 		bool freqLess(const TrieNode& other);
+
+		bool freqMore(const TrieNode& other);
   };
 
   class TrieTreeComp {
@@ -87,6 +88,14 @@ private:
 		bool operator()(TrieNode*& lhs, TrieNode*& rhs) const
 		{
 		  return (*lhs).freqLess(*rhs); 
+		}
+  };
+
+  class TrieNodeOppComp {
+	public:
+		bool operator()(TrieNode*& lhs, TrieNode*& rhs) const
+		{
+		  return (*lhs).freqMore(*rhs);
 		}
   };
   

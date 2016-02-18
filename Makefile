@@ -4,7 +4,9 @@ CC=g++
 CXXFLAGS=-std=c++11 -g -Wall
 LDFLAGS=-g
 
-all: benchtrie util.o
+all: benchtrie benchdict util.o
+
+benchdict: util.o DictionaryTrie.o DictionaryBST.o DictionaryHashtable.o
 
 benchtrie: util.o DictionaryTrie.o DictionaryBST.o DictionaryHashtable.o
 
@@ -17,5 +19,5 @@ DictionaryHashtable.o: DictionaryHashtable.hpp
 util.o: util.hpp
 
 clean:
-	rm -f benchtrie *.o core* *~
+	rm -f benchtrie benchdict *.o core* *~
 

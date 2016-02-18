@@ -171,7 +171,7 @@ int main(int argc, char *argv[]) {
     }
 
     testStudent(argv[1]);
-/*
+
     std::ifstream in;
     in.open(argv[1], std::ios::binary);
 
@@ -179,19 +179,40 @@ int main(int argc, char *argv[]) {
 	
     Utils::load_dict(*dictionary_trie, in);
 
-	in.close();*/
-	/*
-	std:: cout << "inserting abcd: " << dictionary_trie->insert("abcd", 2) << std::endl;
-	std:: cout << "inserting a: " << dictionary_trie->insert("a", 100) << std::endl;
-	std::cout << "inserting ab: " << dictionary_trie->insert("ab",101) << std::endl;
-	std::cout << "inserting abc: " << dictionary_trie->insert("abc",100) << std::endl;
+	in.close();
 
-	std::cout << "finding shrouding: " << dictionary_trie->find("shrouding") << std::endl;	
-	std::cout << "finding shtick: " << dictionary_trie->find("shtick") << std::endl;	
-	std::cout << "finding sdfkjd: " << dictionary_trie->find("sdfkjd") << std::endl;	
-	std::cout << "finding abcd: " << dictionary_trie->find("abcd") << std::endl;	
+    std::cout << "\nWould you like to run additional tests? y/n\n";
+    std::string response;
+    std::getline(std::cin, response);
+
+    if(response.compare("y") == 0){
+        std::string prefix;
+        std::string ws;
+        int num_completions;
+
+        std::cout << "\nAdditional user tests." << std::endl;
+        std::cout << "Enter prefix: ";
+
+        while(std::getline(std::cin, prefix)){
+
+            std::cout << "Enter num_completions: ";
+            std::getline(std::cin, ws);
+            num_completions = stoi(ws);
+
+            std::cout << "\n\tUser Test: prefix= \"" << prefix << "\" num_completions= " << num_completions << std::endl;
+            std::vector<std::string>results = dictionary_trie->predictCompletions(prefix,num_completions);
+			for(unsigned int i = 0; i < results.size(); ++i)
+			{
+			  std::cout << results[i] << std::endl;
+			}
+            std::cout << "Enter prefix: ";
+
+        }
+
+    }
+     
 
 	delete dictionary_trie;
-*/
+
 	return 0;
 }
