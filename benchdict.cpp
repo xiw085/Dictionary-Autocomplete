@@ -24,13 +24,32 @@ int main(int argc, char* argv[])
 
   std::ifstream in;
   in.open(dictfile, std::ios::binary);
+  int len = 0;
+  std::string text = "";
+
+  while(1)
+  {
+  	getline(in, text);
+
+	if(in.eof())
+	{
+	  break;
+	}
+	++len;
+  }
 
   std::cout << std::endl;
   std::cout << "DictionaryTrie" << std::endl;
   
   for(int i = 0; i < num_iteration; ++i)
   {
-  	DictionaryTrie* dictionary_trie = new DictionaryTrie();
+	if(len < min_size + i*step_size)
+	{
+	  std::cout << "WARNING!! FILE HAS FEWER WORDS THAN: " 
+	   			<< min_size + i*step_size << std::endl;
+	}
+	
+	DictionaryTrie* dictionary_trie = new DictionaryTrie();
 	Utils::load_dict(*dictionary_trie, in, min_size + i*step_size);
 	dictionary_trie->find("fjkdjfkdjfdkjfd");
 
@@ -51,6 +70,12 @@ int main(int argc, char* argv[])
 
   for(int i = 0; i < num_iteration; ++i)
   {
+	if(len < min_size + i*step_size)
+	{
+	  std::cout << "WARNING!! FILE HAS FEWER WORDS THAN: " 
+	   			<< min_size + i*step_size << std::endl;
+	}
+
   	DictionaryBST* dictionary_BST = new DictionaryBST();
 	Utils::load_dict(*dictionary_BST, in, min_size + i*step_size);
 	dictionary_BST->find("fjkdjfkdjfdkjfd");
@@ -72,6 +97,12 @@ int main(int argc, char* argv[])
 
   for(int i = 0; i < num_iteration; ++i)
   {
+	if(len < min_size + i*step_size)
+	{
+	  std::cout << "WARNING!! FILE HAS FEWER WORDS THAN: " 
+	   			<< min_size + i*step_size << std::endl;
+	}
+
   	DictionaryHashtable* dictionary_hashtable = new DictionaryHashtable();
 	Utils::load_dict(*dictionary_hashtable, in, min_size + i*step_size);
 	dictionary_hashtable->find("fjkdjfkdjfdkjfd");
