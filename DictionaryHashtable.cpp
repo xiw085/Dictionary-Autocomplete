@@ -1,3 +1,12 @@
+/*
+ * Jae Song, jys023, A12042160
+ * CSE 100 PA 3
+ * 2/18/2016
+ * FileName: DictionaryHashtable.cpp
+ * Description: this file will implement the class DictionaryHashtable
+ *
+ */
+
 #include "util.hpp"
 #include "DictionaryHashtable.hpp"
 
@@ -10,6 +19,8 @@ bool DictionaryHashtable::insert(std::string word)
 {
 	std::pair<std::unordered_set<std::string>::const_iterator,bool> pair 
 		= dictionary.insert(word);
+
+	//return whether or not it was inserted correctly
 	return pair.second;
 }
 
@@ -18,6 +29,8 @@ bool DictionaryHashtable::find(std::string word) const
 {
 	std::unordered_set<std::string>::const_iterator find = 
 		dictionary.find(word);
+
+	//check if it was found or not
 	if(find == dictionary.end())
 	{
 		return false;

@@ -180,7 +180,8 @@ int main(int argc, char *argv[]) {
     Utils::load_dict(*dictionary_trie, in);
 
 	in.close();
-
+	
+	//check predictCompletions
     std::cout << "\nWould you like to run additional tests? y/n\n";
     std::string response;
     std::getline(std::cin, response);
@@ -189,12 +190,14 @@ int main(int argc, char *argv[]) {
         std::string prefix;
         std::string ws;
         int num_completions;
-
+		
+		//get the prefix and check them
         std::cout << "\nAdditional user tests." << std::endl;
         std::cout << "Enter prefix: ";
 
         while(std::getline(std::cin, prefix)){
-
+			
+			//get num_completions
             std::cout << "Enter num_completions: ";
             std::getline(std::cin, ws);
             num_completions = stoi(ws);

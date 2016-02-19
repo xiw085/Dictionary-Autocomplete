@@ -52,57 +52,89 @@ public:
 
 private:
   // Add your own data members and methods here
-
+  
+  /*
+   * This class will implement the TrieNode class which is basically
+   * a class for each node in the multi-way trie
+   *
+   */
   class TrieNode
   {
-  	public: 
-		bool isWord;
-		std::unordered_map<char,TrieNode*> children;
-		std::string text;
-		unsigned int freq;
-		unsigned int maxFreq;
-		
-		//constructor
-		TrieNode(bool isWord, std::string text, unsigned int freq);
-		
-		//deconstructor
-		~TrieNode();
-		
-		bool maxLess(const TrieNode& other);
-
-		bool freqLess(const TrieNode& other);
-
-		bool freqMore(const TrieNode& other);
-  };
-
-  class TrieTreeComp {
   	public:
-		bool operator()(TrieNode*& lhs, TrieNode*& rhs) const 
-		{
-		  return (*lhs).maxLess(*rhs);
-		}
-  };
+	  
+	  //member variables
+ 	  bool isWord;
+	  std::unordered_map<char,TrieNode*> children;
+	  std::string text;
+	  unsigned int freq;
 
-  class TrieNodeComp {
-  	public:
-		bool operator()(TrieNode*& lhs, TrieNode*& rhs) const
-		{
-		  return (*lhs).freqLess(*rhs); 
-		}
-  };
+	  //maxFreq is the maxfreq of a node's subtree
+	  unsigned int maxFreq;
+		
+	  //constructor
+	  TrieNode(bool isWord, std::string text, unsigned int freq);
+		
+	  //deconstructor
+	  ~TrieNode();
+		
+	  //comparison used for TrieTreeComp
+	  bool maxLess(const TrieNode& other);
 
-  class TrieNodeOppComp {
-	public:
-		bool operator()(TrieNode*& lhs, TrieNode*& rhs) const
-		{
-		  return (*lhs).freqMore(*rhs);
-		}
+	  //comparison used for TrieNodeComp
+	  bool freqLess(const TrieNode& other);
+
+      //comparison used for TrieNodeOppComp	  
+	  bool freqMore(const TrieNode& other);
   };
   
+  /*
+   * Comparison class used for priority queue that pops out
+   * the node with the highest maxFreq first
+   */
+  class TrieTreeComp 
+  {
+  	public:
+	  bool operator()(TrieNode*& lhs, TrieNode*& rhs) const 
+	  {
+	    return (*lhs).maxLess(*rhs);
+	  }
+  };
+
+  /*
+   * Comparison class used for priority queue that pops out
+   * the node with the highest freq first
+   *
+   */
+  class TrieNodeComp 
+  {
+  	public:
+	  bool operator()(TrieNode*& lhs, TrieNode*& rhs) const
+	  {
+	    return (*lhs).freqLess(*rhs); 
+	  }
+  };
+
+  /*
+   * Comparison class used for priority queue that pops out
+   * the node with the lowest freq first
+   *
+   */
+  class TrieNodeOppComp 
+  {
+	public:
+	  bool operator()(TrieNode*& lhs, TrieNode*& rhs) const
+	  {
+	    return (*lhs).freqMore(*rhs);
+	  }
+  };
+  
+  //root of the multi-way trie
   TrieNode* root;
   
+  //function that changes the maxfreq is the nodes
   void changeTreeFreq(std::string word, unsigned int freq);
-
+  
+  //helper function that correctly implements the deconstructor
   void deleteAll(TrieNode* node);
 };
 
